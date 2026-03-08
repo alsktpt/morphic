@@ -1,3 +1,4 @@
+import { alibaba,createAlibaba } from '@ai-sdk/alibaba'
 import { anthropic } from '@ai-sdk/anthropic'
 import { createGateway } from '@ai-sdk/gateway'
 import { google } from '@ai-sdk/google'
@@ -10,6 +11,12 @@ const providers: Record<string, any> = {
   openai,
   anthropic,
   google,
+  alibaba: createAlibaba({
+    apiKey: process.env.ALIBABA_API_KEY ?? '',
+    baseURL:
+      process.env.ALIBABA_API_BASE_URL ??
+      'https://dashscope-intl.aliyuncs.com/compatible-mode/v1'
+  }),
   'openai-compatible': createOpenAI({
     apiKey: process.env.OPENAI_COMPATIBLE_API_KEY,
     baseURL: process.env.OPENAI_COMPATIBLE_API_BASE_URL
@@ -42,6 +49,8 @@ export function isProviderEnabled(providerId: string): boolean {
       return !!process.env.ANTHROPIC_API_KEY
     case 'google':
       return !!process.env.GOOGLE_GENERATIVE_AI_API_KEY
+    case 'alibaba':
+      return !!process.env.ALIBABA_API_KEY
     case 'openai-compatible':
       return (
         !!process.env.OPENAI_COMPATIBLE_API_KEY &&
